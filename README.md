@@ -22,9 +22,18 @@ Keywords:
 This homework allowed us to implement from scratch, both theoretically and practically, a Neural Network for the classification of images. It also allowed us to compare the results with a model from the PyTorch library.
 
 Keywords:
+  * CIFAR-10 dataset
   * feedforward model
   * backpropagation algorithm (gradient computation)
   * [SGD](https://en.wikipedia.org/wiki/Stochastic_gradient_descent) training
   * PyTorch
 
 # HW-3 (Convolutional Neural Networks)
+A convolutional neural network was implemented to perform image classification and explore
+methods to improve training performance and the generalization of these networks.
+
+Keywords:
+  * CIFAR-10 dataset
+  * PyTorch
+  * Data agumentation
+  * Early stopping
