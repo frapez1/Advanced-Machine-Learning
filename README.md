@@ -23,8 +23,8 @@ This homework allowed us to implement from scratch, both theoretically and pract
 
 Keywords:
   * CIFAR-10 dataset
-  * feedforward model
-  * backpropagation algorithm (gradient computation)
+  * Feedforward model
+  * Backpropagation algorithm (gradient computation)
   * [SGD](https://en.wikipedia.org/wiki/Stochastic_gradient_descent) training
   * PyTorch
 
