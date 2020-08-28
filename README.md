@@ -19,5 +19,12 @@ Keywords:
 
 # HW-2 (Deep Neural Network and Backpropagation)
 
+This homework allowed us to implement from scratch, both theoretically and practically, a Neural Network for the classification of images. It also allowed us to compare the results with a model from the PyTorch library.
+
+Keywords:
+  * feedforward model
+  * backpropagation algorithm (gradient computation)
+  * [SGD](https://en.wikipedia.org/wiki/Stochastic_gradient_descent) training
+  * PyTorch
 
 # HW-3 (Convolutional Neural Networks)
