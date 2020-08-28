@@ -1,3 +1,3 @@
-# HW-1 
+# HW-2 
 
-In this folder you can find the whole first hw with the text, the code and the report.
+In this folder you can find the whole first hw with the text, code and report.
