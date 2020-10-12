@@ -1,0 +1,253 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+%\usepackage{physics}
+\usepackage[utf8x]{inputenc}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+\usepackage{subfigure}
+\usepackage{circuitikz}
+%\si{\volt}
+\usepackage       {floatflt,epsfig}
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[font=small,format=hang,labelfont={sf,bf}]{caption}
+\usepackage{graphics}
+\usepackage{ctable}
+\usepackage{caption}
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{listings}
+%\newcommand{\vect}[1]{\mathbf{{#1}}}
+
+\DeclareRobustCommand{\vect}[1]{
+  \ifcat#1\relax
+    \boldsymbol{#1}
+  \else
+    \mathbf{#1}
+  \fi}
+
+\title{\BIG{Advanced Machine Learning} \\
+Exercise 2 \\  Deep Neural Network and Backpropagation}
+\author{Abbonato Diletta, Pezone Francesco, Testa Lucia}
+\date{25 March 2020}
+
+\begin{document}
+
+\maketitle
+
+
+
+
+
+
+\section*{Question 2}
+\subsection*{2.a}
+The input vector is a column vector $\vect{z_i}^{(3)}  \in \mathbb{R}^{s \times 1}$.
+
+\begin{equation}
+\frac{\partial J}{\partial \vect{z_i}^{(3)}} = \begin{pmatrix}
+\frac{\partial }{\partial (z_i^{(3)})_1}\\ 
+.\\ 
+.\\ 
+.\\ 
+\frac{\partial }{\partial (z_i^{(3)})_s}
+\end{pmatrix} \frac{1}{N}[ -log(\psi(z_i^{(3)})_{y_i})] = 
+\frac{1}{N}
+\begin{pmatrix}
+\psi(z_i^{(3)})_{1}\\ 
+.\\ 
+.\\ 
+\psi(z_i^{(3)})_{y_i} - 1\\ 
+.\\ 
+.\\ 
+\psi(z_i^{(3)})_{s} 
+
+\end{pmatrix} = 
+\frac{1}{N}[\vect{\psi}\vect{(z_i}^{(3)}) -  \vect{\delta}_{i,y_i} ]
+\end{equation}
+
+From the formula (9) in the pdf we select only the $i^{th}$ column vector, for this reason the sum disappears.\\
+Each element $s^{th}$ of the vector is obtained as the product $ \frac{\partial log(\psi(z_i^{(3)})_{y_i})}{\partial \psi(z_i^{(3)})_m}\frac{\partial \psi(z_i^{(3)})_m}{\partial (z_i^{(3)})_s} $ with (in the first formula we have implied the delta among $m$ and $y_i$, we'll consider it in the second formula): 
+ 
+$$
+\frac{\partial }{\partial \psi(z_i^{(3)})_m}log(\psi(z_i^{(3)})_{y_i}) = \frac{1}{\psi(z_i^{(3)})_{y_i}} 
+$$
+
+$$
+\frac{\partial }{\partial (z_i^{(3)})_s} \psi(z_i^{(3)})_{y_i} = \left\{\begin{array}{l} \psi(z_i^{(3)})_{y_i}^2 - \psi(z_i^{(3)})_{y_i} \hskip 1.53cm \text{if}\hskip 0.3cm  s = y_i\\ \psi(z_i^{(3)})_{y_i}\psi(z_i^{(3)})_{s} - \psi(z_i^{(3)})_{y_i} \hskip 0.3cm \text{if}\hskip 0.3cm  s \neq y_i\end{array}\right.
+$$
+
+
+\subsection*{2.b}
+We initially consider the single term of the summation, as in the previous point. The only thing we have to prove is $\frac{\partial \vect{z_i}^{(3)}}{\partial \vect{W}^{(2)}} = \frac{\partial}{\partial \vect{W}^{(2)}}  \vect{W}^{(2)}\vect{a}_i^{(2)} = \vect{a}_i^{(2)^T}$. \\
+To do this we generally write the formulas in the instructions file.
+
+$$
+\vect{Y} = \vect{AB} \hskip 1cm \Longrightarrow \hskip 1cm \left\{\begin{array}{l} 
+\frac{\partial L}{\partial \vect{A}} = \frac{\partial L}{\partial \vect{Y}}\vect{B}^T\\ \frac{\partial L}{\partial \vect{B}} = \vect{A}^T\frac{\partial L}{\partial \vect{Y}}
+\end{array}\right.
+$$
+Observing the formulas, the demonstration is immediate.\\
+The sum is due to the sum in the formula of $ J $ in the instructions file, since now we must consider all the column vectors.\\
+
+The second thing to prove is $\frac{\partial }{\partial \vect{W}^{(2)}} \left \| \vect{W}^{(2)} \right \|^2_2 = 2 \vect{W}^{(2)}$ since $\lambda$ is a moltiplicative constant in $\vect{W}^{(2)}$.
+For a generic element of the matrix we have: 
+
+$$
+\frac{\partial }{\partial W^{(2)}_{m,n}} \left \| \vect{W}^{(2)} \right \|^2_2 = \frac{\partial }{\partial W^{(2)}_{m,n}} \sum_{i}\sum_{j} W^{(2)}_{i,j} = 2\delta_{m,i}\delta_{n,j} = 2 W^{(2)}_{m,n}
+$$
+So for each $W^{(2)}_{m,n}$ and multiplying by $\lambda$ the proof is over.\\
+At the end we have:
+$$
+\frac{\partial J}{\partial \vect{W}^{(2)}} = \sum_{i=1}^N\frac{\partial J}{\partial\vect{z}_i^{(3)}} \vect{a}_i^{(2)^T}  + 2\lambda \vect{W}^{(2)} 
+$$
+
+
+
+
+
+\subsection*{2.c}
+
+Let's start with $\frac{\partial J}{\partial \vect{b}^{(2)}}$, and as before we first consider the case with a single input vector; with the chain rule we have:
+
+$$
+\frac{\partial J}{\partial \vect{z}_i^{(3)}} \frac{\partial \vect{z}_i^{(3)}}{\partial \vect{b}^{(2)}} =  \begin{pmatrix}
+\frac{\partial }{\partial b_1^{(2)}}\\ 
+.\\ 
+.\\ 
+.\\ 
+\frac{\partial }{\partial b_s^{(2)}}
+\end{pmatrix}\begin{pmatrix}
+(z_i^{(3)})_1 & . &  .& . & (z_i^{(3)})_s
+\end{pmatrix}\frac{\partial J}{\partial \vect{z}_i^{(3)}} = \mathbb{I}_{s \times s} \frac{\partial J}{\partial \vect{z}_i^{(3)}} = \frac{\partial J}{\partial \vect{z}_i^{(3)}}
+$$
+
+As in point b, when we consider all the $ N $ vectors we have to add up all the columns, therefore:
+
+$$
+\frac{\partial J}{\partial \vect{b}^{(2)}} = 
+\sum_{i=1}^N \frac{\partial J}{\partial \vect{z}_i^{(3)}} \frac{\partial \vect{z}_i^{(3)}}{\partial \vect{b}^{(2)}} =  
+\sum_{i=1}^N \frac{\partial J}{\partial \vect{z}_i^{(3)}}
+$$
+
+In order to find the other two it is necessary to continue the backpropagation, for this we calculate the new term, we use the formula at the beginning of point b, note than we are considering the whole $\vect{z}^{(3)} \in \mathbb{R}^{s \times N}$ made of vector columns $\vect{z}_i^{(3)}$:
+
+$$
+ \frac{\partial J}{\partial \vect{a}^{(2)}} = \frac{\partial J}{\partial \vect{z}^{(3)}}\frac{\partial \vect{z}^{(3)}}{\partial \vect{a}^{(2)}} =  \vect{W}^{(2)^T}\frac{\partial J}{\partial \vect{z}^{(3)}}
+
+$$
+
+Now we have to go back to the relu; since it is $ max \{0, \vect{z}^{(2)}\} $ its derivative is the known Heaviside step function. The result should be a matrix, for each column of $\vect{z}^{(3)}$ but if we introduce the Hadamard product elementwise we can save a lot of memory space.
+$$
+\frac{\partial J}{\partial \vect{z}^{(2)}} = \frac{\partial J}{\partial \vect{a}^{(2)}}\frac{\partial \vect{a}^{(2)}}{\partial \vect{z}^{(2)}} = \frac{\partial J}{\partial \vect{a}^{(2)}} \odot \vect{H}(\vect{z}^{(2)})
+$$
+
+And now we can finally start with the last two elements (notice that we are going to use the same steps of the upper layers):
+
+$$
+\frac{\partial J}{\partial \vect{b}^{(1)}} = 
+\sum_{i=1}^N\frac{\partial J}{\partial \vect{z}_i^{(2)}} \frac{\partial \vect{z}_i^{(2)}}{\partial \vect{b}^{(1)}} =  
+\sum_{i=1}^N\frac{\partial J}{\partial \vect{z}_i^{(2)}}
+$$
+
+$$
+\frac{\partial J}{\partial \vect{W}^{(1)}} = \sum_{i=1}^N\frac{\partial J}{\partial\vect{z}_i^{(2)}}  \frac{\partial \vect{z}_i^{(2)}}{\partial \vect{W}^{(1)}} + 2\lambda \vect{W}^{(1)} = \sum_{i=1}^N\frac{\partial J}{\partial\vect{z}_i^{(2)}} \vect{a}_i^{(1)^T}  + 2\lambda \vect{W}^{(1)} 
+$$
+
+\section*{Question 3}
+\subsection*{3.b}
+
+SGD works one example at a time as it updates the parameters using only a single training instance in each iteration that is randomly chosen and converges quickly with noisy estimates of the error gradient. The best way to set the parameters was to monitor the validation/test of the loss and tuning the hyperparameters for a few epochs. The first step in finding the best configuration was to cyclically increase the learning rate, leaving the other hyperparameters unchanged. Once we found an optimal value that would lead the analysis to exceed 0.48, we continued in changing of the other hyperparameters. Increasing and decreasing the batch size and the number of iterations. Initially increasing the number of iterations a noticeable increase was noticed, from 0.48 to 0.50, remaining with a batch size of 200. After that, a better performance was noticed by increasing the batch size from 200 to 300, also bringing the number of iterations to 5000.
+\newpage
+\subsection*{Plots when accuracy = 0.48}
+
+\begin{figure}[!h]
+	\begin{center}
+		\subfigure[]{
+			\includegraphics[scale=0.60]{loss low.png}
+		
+		}
+		\hspace{1mm}
+		\subfigure[]{
+			\includegraphics[scale=0.50]{class hist low.png}
+		
+		}
+	
+		
+		
+	\end{center}
+	\captionsetup{justification=raggedright,margin=1cm}
+	\label{gr}
+\end{figure}
+
+\subsection*{Plots with intermediate values, with accuracy= 0.522}
+
+\begin{figure}[!h]
+	\begin{center}
+		\subfigure[]{
+			\includegraphics[scale=0.60]{loss_Intermediate_.PNG}
+		}
+		\hspace{2mm}
+		\subfigure[]{
+			\includegraphics[scale=0.80]{class hist intermadiate.PNG}
+		
+		}
+	
+		
+		
+	\end{center}
+	\captionsetup{justification=raggedright,margin=1cm}
+	\label{gr}
+\end{figure}
+\newpage
+
+\subsection*{Plots with best values, with accuracy= 0.534}
+
+\begin{figure}[!h]
+	\begin{center}
+		\subfigure[]{
+			\includegraphics[scale=0.60]{loss best.PNG}  
+		
+		}
+		\hspace{2mm}
+		\subfigure[]{
+			\includegraphics[scale=0.50]{class hist best.PNG}
+		
+		}
+	
+		
+		
+	\end{center}
+	\captionsetup{justification=raggedright,margin=1cm}
+	\label{gr}
+\end{figure}
+
+
+\section*{Question 4}
+\subsection*{4.c}
+Shown below are training and validation results with 1,3,4 and 5 layers.
+From the results obtained we can see that as the hidden size increases the accuracy improves.
+
+\begin{center}
+\begin{table}[!h]
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Hidden layers} & \textbf{Accuracy Train} & \textbf{Accuracy Test} \\ \hline
+default                & 50.8 &	49.5                     \\ \hline
+3                      & 52.1&  51.7                  \\ \hline
+4                     & 52.0&	51.8                   \\ \hline
+5                      &52.7&	53.3                      \\ \hline
+\end{tabular}
+\end{table}
+\end{center}
+
+It must be said, however, that the default results were obtained with the initial weights while for the other values we used the default weights given by Pytorch.
+
+
+
+\end{document}
